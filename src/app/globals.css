@@ -1,0 +1,352 @@
+@import "tailwindcss";
+
+:root {
+  /* ──────────────────────────────────────────────────────────
+     ElevenLabs Editorial — Design Tokens (alpha)
+     Canvas is off-white, ink is warm near-black.
+     Brand voltage is atmospheric gradients, not chromatic.
+     ────────────────────────────────────────────────────────── */
+
+  /* Canvas & Surfaces */
+  --canvas: #f5f5f5;
+  --canvas-soft: #fafafa;
+  --surface-card: #ffffff;
+  --surface-strong: #f0efed;
+  --surface-dark: #0c0a09;
+  --surface-dark-elevated: #1c1917;
+
+  /* Ink & Text */
+  --primary: #292524;
+  --primary-active: #0c0a09;
+  --ink: #0c0a09;
+  --body: #4e4e4e;
+  --body-strong: #292524;
+  --muted: #6e6862;
+  --muted-soft: #a8a29e;
+
+  /* Hairlines — 1px dividers on light canvas */
+  --hairline: #e7e5e4;
+  --hairline-soft: #f0efed;
+  --hairline-strong: #d6d3d1;
+
+  /* On colours */
+  --on-primary: #ffffff;
+  --on-dark: #ffffff;
+  --on-dark-soft: #a8a29e;
+
+  /* Atmospheric gradient stops — decoration only */
+  --gradient-mint: #a7e5d3;
+  --gradient-peach: #f4c5a8;
+  --gradient-lavender: #c8b8e0;
+  --gradient-sky: #a8c8e8;
+
+  /* Semantic */
+  --semantic-error: #dc2626;
+  --semantic-success: #16a34a;
+  --success: var(--semantic-success);
+  --error: var(--semantic-error);
+  --warning: #eab308;
+
+  /* ── Backward-compatible aliases for existing CapAI components ──
+     Existing code uses --bg-base / --text-primary / --border / --accent
+     These now point at ElevenLabs light equivalents so nothing breaks
+     before components are redesigned. */
+  --bg-base: var(--canvas);
+  --bg-surface: var(--surface-card);
+  --bg-elevated: var(--canvas-soft);
+  --bg-hover: var(--surface-strong);
+  --border: var(--hairline);
+  --border-subtle: var(--hairline-soft);
+  --border-strong: var(--hairline-strong);
+  --accent: var(--primary);
+  --accent-hover: var(--primary-active);
+  --accent-glow: rgba(41, 37, 36, 0.08);
+  --text-primary: var(--ink);
+  --text-secondary: var(--body);
+  --text-muted: var(--muted);
+
+  /* Radius — pill for CTAs/badges, xl for cards, xxl for orb cards */
+  --radius-card: var(--radius-xl);
+  --radius-input: var(--radius-md);
+  --radius-badge: var(--radius-pill);
+  --radius-modal: var(--radius-xl);
+  --radius-xl: 16px;
+  --radius-xxl: 24px;
+  --radius-pill: 9999px;
+
+  /* Spacing — 4px base unit, section rhythm 96px */
+  --spacing-xxs: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-base: 16px;
+  --spacing-md: 20px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+  --spacing-section: 96px;
+
+  /* Elevation — hairline + soft drop, never heavy shadows */
+  --shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 2px 16px rgba(0, 0, 0, 0.06);
+  --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.08);
+
+  /* Shadcn / Next compat */
+  --background: var(--canvas);
+  --foreground: var(--ink);
+
+  /* Font variable fallbacks — layout.tsx provides --font-eb + --font-inter */
+  --font-display: var(--font-eb);
+  --font-geist-sans: var(--font-inter);
+  --font-geist-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+@theme inline {
+  /* Canvas & surfaces */
+  --color-canvas: var(--canvas);
+  --color-canvas-soft: var(--canvas-soft);
+  --color-canvas-deep: var(--canvas-deep);
+  --color-surface-card: var(--surface-card);
+  --color-surface-strong: var(--surface-strong);
+  --color-surface-dark: var(--surface-dark);
+  --color-surface-dark-elevated: var(--surface-dark-elevated);
+
+  /* Ink & text */
+  --color-primary: var(--primary);
+  --color-primary-active: var(--primary-active);
+  --color-ink: var(--ink);
+  --color-body: var(--body);
+  --color-body-strong: var(--body-strong);
+  --color-muted: var(--muted);
+  --color-muted-soft: var(--muted-soft);
+
+  /* Hairlines */
+  --color-hairline: var(--hairline);
+  --color-hairline-soft: var(--hairline-soft);
+  --color-hairline-strong: var(--hairline-strong);
+
+  /* On colours */
+  --color-on-primary: var(--on-primary);
+  --color-on-dark: var(--on-dark);
+  --color-on-dark-soft: var(--on-dark-soft);
+
+  /* Gradients */
+  --color-gradient-mint: var(--gradient-mint);
+  --color-gradient-peach: var(--gradient-peach);
+  --color-gradient-lavender: var(--gradient-lavender);
+  --color-gradient-sky: var(--gradient-sky);
+
+  /* Semantic */
+  --color-success: var(--success);
+  --color-error: var(--error);
+  --color-warning: var(--warning);
+  --color-semantic-error: var(--semantic-error);
+  --color-semantic-success: var(--semantic-success);
+
+  /* Legacy aliases — keep existing utilities working */
+  --color-bg-base: var(--bg-base);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-bg-hover: var(--bg-hover);
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-glow: var(--accent-glow);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Typography — Waldenburg (EB Garamond fallback) for display, Inter for body */
+  --font-sans: var(--font-inter), Inter, system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-eb), "EB Garamond", "Times New Roman", serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Radius */
+  --radius-card: var(--radius-card);
+  --radius-input: var(--radius-input);
+  --radius-badge: var(--radius-badge);
+  --radius-modal: var(--radius-modal);
+  --radius-xl: var(--radius-xl);
+  --radius-xxl: var(--radius-xxl);
+  --radius-pill: var(--radius-pill);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  color-scheme: light dark;
+  scrollbar-gutter: stable;
+}
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-inter), Inter, system-ui, -apple-system, sans-serif;
+  font-feature-settings: "rlig" 1, "calt" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Display headings — Waldenburg Light via EB Garamond 300 */
+h1, h2, h3, h4 {
+  font-family: var(--font-eb), "EB Garamond", "Times New Roman", serif;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+/* Scrollbar — light editorial */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--hairline-strong) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--hairline-strong);
+  border-radius: 9999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-soft);
+}
+
+/* Selection — soft mint wash */
+::selection {
+  background: rgba(167, 229, 211, 0.45);
+  color: var(--ink);
+}
+
+/* Focus ring — ink + subtle ring, editorial quiet — box-shadow avoids overflow-hidden clip (UI-31) */
+*:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--surface-card), 0 0 0 4px var(--primary), 0 0 0 8px rgba(41, 37, 36, 0.08);
+  transition: box-shadow 150ms ease;
+}
+@supports not (box-shadow: 0 0 0 0) {
+  *:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Utility for mono timestamps */
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* Utility for display serif */
+.font-display {
+  font-family: var(--font-eb), "EB Garamond", "Times New Roman", serif;
+  font-weight: 300;
+}
+.font-display-500 {
+  font-family: var(--font-eb), "EB Garamond", "Times New Roman", serif;
+  font-weight: 500;
+}
+
+/* ──────────────────────────────────────────────────────────
+   Button Utilities — ElevenLabs pill system
+   Primary: ink pill 40px / 15px 500 / pill 9999
+   Outline: transparent + hairline-strong border / same type
+   ────────────────────────────────────────────────────────── */
+.btn-primary {
+  background: var(--primary);
+  color: var(--on-primary);
+  border-radius: var(--radius-pill);
+  height: 40px;
+  padding: 10px 20px;
+  font-family: var(--font-inter), Inter, system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid transparent;
+  box-shadow: 0 1px 2px rgba(12, 10, 9, 0.06);
+  transition: background 150ms ease, box-shadow 150ms ease, transform 150ms ease, opacity 150ms ease;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.btn-primary:hover {
+  background: var(--primary-active);
+  box-shadow: 0 4px 16px rgba(12, 10, 9, 0.12);
+}
+.btn-primary:active {
+  background: var(--primary-active);
+  transform: scale(0.98);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+.btn-primary:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(41, 37, 36, 0.08);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-pill);
+  height: 40px;
+  padding: 9px 19px;
+  font-family: var(--font-inter), Inter, system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease, transform 150ms ease;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.btn-outline:hover {
+  background: var(--surface-card);
+  border-color: var(--hairline-strong);
+  box-shadow: 0 1px 8px rgba(12, 10, 9, 0.04);
+}
+.btn-outline:active {
+  transform: scale(0.98);
+}
+.btn-outline:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* .btn-ghost removed — 0 importers (UI-25 dead code) — use btn-outline instead */
+
+@media print {
+  .no-print, header, footer { display: none !important; }
+  body { background: white !important; color: black !important; }
+  * { box-shadow: none !important; }
+}
