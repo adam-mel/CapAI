@@ -10,6 +10,7 @@ out
 *.log
 .DS_Store
 Thumbs.db
+temp-e2e/
 temp-e2e/downloads/*.mp4
 temp-e2e/downloads/*.webm
 
