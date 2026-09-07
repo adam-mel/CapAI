@@ -1,0 +1,11 @@
+node_modules
+.next
+temp-e2e
+coverage
+playwright-report
+test-results
+*.mp4
+*.webm
+.vercel
+.git
+BUG_SEARCH_FINDINGS
