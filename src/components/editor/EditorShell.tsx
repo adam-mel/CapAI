@@ -289,7 +289,7 @@ export default function EditorShell({ captionListSlot, stylePanelSlot, waveformS
         </div>
       </header>
 
-      {/* Main content — primary landmark — light editorial canvas with feature-card panels — in-flow 56px rail guarantees no overlay incursion at any zoom/subpixel. pt-0 (no negative margin) so video top never slides under sticky SiteHeader. p reduced to lg:p-4 + gap-3 to give video more vertical room vs previous lg:p-6/gap-4 waste. */}
+      {/* Main content — primary landmark — scroll fix: main/row/wrapper are flex-1 min-h-0 with overflow-hidden ONLY at lg (desktop fixed viewport). Mobile/tablet remain natural scroll (no overflow-hidden). Video is shrink-0 flex-none (h-auto) so it never stretches and leaves white; Caption is flex-1 min-h-0 overflow-hidden at lg with internal overflow-y-auto. */}
       <main id="main-content" className="flex flex-1 min-h-0 min-w-0 flex-col bg-[var(--canvas)] p-3 sm:p-4 lg:p-4 gap-3 lg:gap-3 lg:overflow-hidden">
         {/* Mobile mode toggle row (visible only <sm) — fixed widths prevent shift */}
         <div className="flex items-center justify-center gap-2 border border-[var(--hairline)] bg-[var(--surface-card)] rounded-[var(--radius-xl)] px-3 py-2 sm:hidden shadow-[var(--shadow-soft)]">
@@ -339,16 +339,16 @@ export default function EditorShell({ captionListSlot, stylePanelSlot, waveformS
           </div>
         </div>
 
-        {/* Main 3-col area — flex-1 min-h-0 overflow-hidden (lg) so video card never pushes controls out / no desktop scroll */}
+        {/* Main 3-col area — lg:overflow-hidden only at lg; mobile natural scroll */}
         <div className="flex flex-1 min-h-0 min-w-0 flex-col gap-3 lg:flex-row lg:gap-3 lg:overflow-hidden">
-          {/* Left+Center wrapper — in-flow rail occupies flex space, so Video 58%+ Caption flex-1 fill remaining width minus 56px+GAP, never under rail */}
-          <div className="flex flex-1 min-h-0 min-w-0 flex-col gap-3 sm:flex-row lg:flex-row lg:gap-3 lg:overflow-hidden">
-            {/* Video Player — flex-1 min-h-0 overflow-hidden so card stays inside viewport; stage flex-1 handles portrait sizing without vh calc. lg:flex-1 stretch fills row height; p reduced to lg:p-3 to maximize stage (prev p-5 wasted 16px). */}
+          {/* Left+Center wrapper — lg:overflow-hidden + lg:items-start prevents Video stretch; mobile is natural column then sm row */}
+          <div className="flex flex-1 min-h-0 min-w-0 flex-col gap-3 sm:flex-row lg:flex-row lg:gap-3 lg:overflow-hidden lg:items-start">
+            {/* Video Player — scroll fix: shrink-0 flex-none h-auto (not flex-1) so card sizes to video content and never leaves white gap. At lg, self-start prevents stretch; inner stage handles portrait via aspectRatio without flex-1 height-0 trick. */}
             <section
-              className={`flex flex-1 min-h-0 flex-col items-stretch overflow-hidden bg-[var(--surface-card)] border border-[var(--hairline)] rounded-[var(--radius-xl)] shadow-[var(--shadow-card)] sm:w-[60%] p-3 lg:p-3 ${isStyleCollapsed ? "lg:w-[58%] xl:w-[56%]" : "lg:w-[52%] xl:w-[52%]"}`}
+              className={`flex shrink-0 flex-none flex-col items-stretch overflow-hidden bg-[var(--surface-card)] border border-[var(--hairline)] rounded-[var(--radius-xl)] shadow-[var(--shadow-card)] w-full sm:w-[60%] p-3 lg:p-3 lg:shrink-0 lg:flex-none lg:self-start ${isStyleCollapsed ? "lg:w-[58%] xl:w-[56%]" : "lg:w-[52%] xl:w-[52%]"}`}
               aria-label="Video player"
             >
-              <div className="flex w-full flex-1 min-h-0 justify-center overflow-hidden lg:flex-1 lg:min-h-0">
+              <div className="flex w-full shrink-0 justify-center overflow-hidden">
                 <VideoPlayer videoDims={videoDims} />
               </div>
               <p className="mt-3 hidden text-center text-[11px] text-[var(--muted)] sm:block">
@@ -357,10 +357,10 @@ export default function EditorShell({ captionListSlot, stylePanelSlot, waveformS
               </p>
             </section>
 
-            {/* Caption List — Option A+B: lg:flex-1 fills wrapper (no 30% cap) — ~507px expanded, ~460px collapsed */}
+            {/* Caption List — scroll fix: flex-1 min-h-0 with overflow-hidden at lg and internal overflow-y-auto (CaptionList's listRef). Mobile keeps min-h-[320px] for usability but allows page scroll; at lg, flex-1 + min-h-0 + lg:overflow-hidden lets 73 segments scroll internally without page white. */}
             <section
               id="caption-list-slot"
-              className="flex min-h-[380px] flex-col bg-[var(--surface-card)] border border-[var(--hairline)] rounded-[var(--radius-xl)] shadow-[var(--shadow-card)] overflow-hidden sm:min-h-0 sm:w-[40%] lg:w-auto lg:flex-1"
+              className="flex flex-1 min-h-[320px] flex-col bg-[var(--surface-card)] border border-[var(--hairline)] rounded-[var(--radius-xl)] shadow-[var(--shadow-card)] overflow-hidden sm:min-h-0 sm:w-[40%] lg:w-auto lg:flex-1 lg:min-h-0 lg:self-stretch lg:overflow-hidden"
               aria-label="Caption list"
             >
               {captionListSlot ?? <CaptionList />}

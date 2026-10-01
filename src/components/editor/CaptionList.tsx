@@ -313,8 +313,8 @@ export default function CaptionList() {
         </span>
       </div>
 
-      {/* Scrollable rows — canvas background lets surface-card rows pop */}
-      <div ref={listRef} className="flex-1 overflow-y-auto bg-[var(--canvas)] p-2" role="list" aria-label="Caption segments">
+      {/* Scrollable rows — scroll-fix: flex-1 min-h-0 overflow-y-auto so 73 segments scroll internally inside lg:overflow-hidden parent; min-h-0 prevents flex blowout. */}
+      <div ref={listRef} className="flex-1 min-h-0 overflow-y-auto bg-[var(--canvas)] p-2" role="list" aria-label="Caption segments">
         {!hasSegments ? (
           <div className="flex flex-col items-center justify-center gap-3 rounded-[var(--radius-xl)] border border-dashed border-[var(--hairline)] bg-[var(--surface-card)] p-8 text-center shadow-[var(--shadow-soft)]">
             <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--hairline)] bg-[var(--surface-strong)] text-[var(--muted)]">◎</div>

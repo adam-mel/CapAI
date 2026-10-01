@@ -51,21 +51,17 @@ export default function VideoPlayer({ videoDims: externalDims }: VideoPlayerProp
   const hasExternal = !!(externalDims && externalDims.w && externalDims.h && externalDims.w >= 64 && externalDims.h >= 64);
   const dims = hasExternal ? (externalDims as { w: number; h: number }) : measuredDims;
   const isPortrait = !!(dims && dims.h > dims.w);
-  // Flex-constrained stage — fills available flex height, no vh calc (prev calc(100vh-360px)=540px@900px wasted 120px).
-  // Parent row is h-[calc(100vh-64px)] + overflow-hidden, outer card flex-1 min-h-0 (column), stage flex-1 min-h-0
-  // (flex:1 1 0) with aspectRatio and no maxHeight cap — flexbox distributes remaining viewport after
-  // headers/padding, so portrait 9:16 expands to use full available (~640px vs 540px before) without
-  // pushing controls out. maxWidth 100% + object-contain handles landscape/vertical without letterbox clip.
+  // Scroll-fix stage — Video card is now shrink-0 flex-none (h-auto), not flex-1, so stage must not use height:0+flex:1 trick which left white gap when card stretched.
+  // Use natural aspectRatio + width:100% + height:auto with a viewport-capped maxHeight so portrait 9:16 never exceeds available desktop height.
+  // At lg (desktop fixed viewport lg:h-[calc(100vh-64px)] with secondary header 48px + p-4 + controls ~120px), max ~62vh keeps 9:16 at ~540-560px @900px, leaving Caption+Waveform ~190px < 788 without scroll. Mobile uses same cap but natural page scroll allowed (no outer overflow-hidden).
   const stageStyle: React.CSSProperties | undefined =
     dims && !isFullscreen
       ? {
           aspectRatio: `${dims.w} / ${dims.h}`,
-          flex: "1 1 0",
-          minHeight: 0,
-          maxHeight: "none",
+          width: "100%",
+          height: "auto",
           maxWidth: "100%",
-          width: "auto",
-          height: "0",
+          maxHeight: "min(62vh, 640px)",
           alignSelf: "center",
         }
       : undefined;
@@ -407,11 +403,11 @@ export default function VideoPlayer({ videoDims: externalDims }: VideoPlayerProp
   return (
     <div
       ref={containerRef}
-      className={`group flex flex-col flex-1 min-h-0 overflow-hidden rounded-[var(--radius-xl)] border border-[var(--hairline)] bg-[var(--surface-card)] shadow-[var(--shadow-card)] w-full ${isPortrait && !isFullscreen ? "mx-auto" : ""} ${isFullscreen ? "rounded-none border-0 !bg-[var(--surface-dark)]" : ""}`}
+      className={`group flex flex-col shrink-0 overflow-hidden rounded-[var(--radius-xl)] border border-[var(--hairline)] bg-[var(--surface-card)] shadow-[var(--shadow-card)] w-full ${isPortrait && !isFullscreen ? "mx-auto" : ""} ${isFullscreen ? "rounded-none border-0 !bg-[var(--surface-dark)]" : ""}`}
     >
-      {/* Video stage — flex-1 min-h-0 so it fills available card height; object-contain on video scales AR without overflow. No vh calc. */}
+      {/* Video stage — shrink-0 h-auto so Video card sizes to content; stage uses aspectRatio+maxHeight cap, not flex-1 height:0 which caused white gap. Fullscreen restores flex-1. */}
       <div
-        className={`relative overflow-hidden bg-[var(--surface-dark)] w-full ${isFullscreen ? "flex flex-1 min-h-0 items-center justify-center" : dims ? "flex flex-1 min-h-0 items-center justify-center" : "aspect-video shrink-0"}`}
+        className={`relative overflow-hidden bg-[var(--surface-dark)] w-full ${isFullscreen ? "flex flex-1 min-h-0 items-center justify-center" : dims ? "flex shrink-0 items-center justify-center" : "aspect-video shrink-0"}`}
         style={stageStyle}
       >
         {videoBlob ? (
