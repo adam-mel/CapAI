@@ -38,17 +38,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" dir="ltr" className={`${ebGaramond.variable} ${inter.variable} light`} suppressHydrationWarning>
-      <body className="min-h-screen bg-[var(--canvas)] text-[var(--ink)] antialiased">
+      <body className="flex min-h-screen flex-col bg-[var(--canvas)] text-[var(--ink)] antialiased">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-pill focus:bg-[var(--surface-card)] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--canvas)]"
         >
           Skip to main content
         </a>
-        {/* Global top-nav — ElevenLabs editorial spec: 64px, canvas, hairline, wordmark left, nav center, primary pill right — single sticky header (z-50 solid canvas prevents bleed-through; body has no negative margin so EditorShell calc(100vh-64px) sits exactly below) */}
+        {/* Global top-nav — ElevenLabs editorial spec: 64px, canvas, hairline, wordmark left, nav center, primary pill right — single sticky header (z-50 solid canvas prevents bleed-through; body flex-col + flex-1 wrapper ensures EditorShell calc(100vh-64px) sits exactly below sticky header with no negative margin / no mt-[-64px]) */}
         <SiteHeader />
         <LangDirSync />
-        <div className="flex min-h-0 flex-col">
+        <div className="flex flex-1 min-h-0 flex-col">
           {children}
         </div>
         <QuickSettingsModal />

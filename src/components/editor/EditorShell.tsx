@@ -158,7 +158,7 @@ export default function EditorShell({ captionListSlot, stylePanelSlot, waveformS
 
   return (
     <div className="flex min-h-[calc(100vh-64px)] flex-col bg-[var(--canvas)] lg:h-[calc(100vh-64px)] lg:min-h-[calc(100vh-64px)] lg:overflow-hidden">
-      {/* Secondary toolbar — 48px, shrink-0 not sticky (avoids double-sticky overlap with SiteHeader top-0). z-30 < SiteHeader z-50, solid canvas so no bleed. */}
+      {/* Secondary toolbar — 48px, in-flow shrink-0 (not sticky) so it naturally sits below SiteHeader (64px) inside flex column; video starts at 112px below viewport top with no overlap. Solid bg-[var(--canvas)] prevents bleed. */}
       <header className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-[var(--hairline)] bg-[var(--canvas)] px-3 sm:px-4 lg:px-6">
         {/* Left: back + filename */}
         <div className="flex min-w-0 items-center gap-3">

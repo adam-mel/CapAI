@@ -51,9 +51,8 @@ export default function VideoPlayer({ videoDims: externalDims }: VideoPlayerProp
   const hasExternal = !!(externalDims && externalDims.w && externalDims.h && externalDims.w >= 64 && externalDims.h >= 64);
   const dims = hasExternal ? (externalDims as { w: number; h: number }) : measuredDims;
   const isPortrait = !!(dims && dims.h > dims.w);
-  // Scroll-fix stage — Video card is now shrink-0 flex-none (h-auto), not flex-1, so stage must not use height:0+flex:1 trick which left white gap when card stretched.
-  // Use natural aspectRatio + width:100% + height:auto with a viewport-capped maxHeight so portrait 9:16 never exceeds available desktop height.
-  // At lg (desktop fixed viewport lg:h-[calc(100vh-64px)] with secondary header 48px + p-4 + controls ~120px), max ~62vh keeps 9:16 at ~540-560px @900px, leaving Caption+Waveform ~190px < 788 without scroll. Mobile uses same cap but natural page scroll allowed (no outer overflow-hidden).
+  // Scroll-fix stage — Video card is shrink-0 flex-none h-auto, not flex-1, so stage uses natural aspectRatio + capped maxHeight to avoid pushing caption down and leaving white below.
+  // Desktop fixed viewport lg:h-[calc(100vh-64px)] with secondary header 48px + p-4 + controls ~120px: cap at min(55vh,560px) keeps 9:16 portrait smaller, leaving Caption flex-1 to fill remaining height and scroll internally without page white gap. Mobile natural scroll.
   const stageStyle: React.CSSProperties | undefined =
     dims && !isFullscreen
       ? {
@@ -61,7 +60,7 @@ export default function VideoPlayer({ videoDims: externalDims }: VideoPlayerProp
           width: "100%",
           height: "auto",
           maxWidth: "100%",
-          maxHeight: "min(62vh, 640px)",
+          maxHeight: "min(55vh, 560px)",
           alignSelf: "center",
         }
       : undefined;
