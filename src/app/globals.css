@@ -183,6 +183,23 @@ html {
   scrollbar-gutter: stable;
 }
 
+/* Scroll fix — at lg page must not scroll beyond viewport; only caption list scrolls internally.
+   Window 900px tall showed html.scrollHeight 1936 (1036px white tail) despite body 900.
+   Lock html/body to viewport height at desktop; keep natural scroll on mobile. */
+@media (min-width: 1024px) {
+  html {
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+  }
+  body {
+    height: 100vh;
+    max-height: 100vh;
+    min-height: 0;
+    overflow: hidden;
+  }
+}
+
 body {
   background: var(--canvas);
   color: var(--ink);

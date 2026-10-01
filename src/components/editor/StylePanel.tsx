@@ -455,7 +455,7 @@ export default function StylePanel({ collapsed, onCollapsedChange, className, hi
   }
 
   return (
-    <div className={`flex h-full min-h-0 flex-col bg-[var(--surface-card)] ${className ?? ""}`}>
+    <div className={`flex h-full min-h-0 flex-col overflow-hidden bg-[var(--surface-card)] ${className ?? ""}`}>
       {/* Panel header — hidden when hideHeader (e.g., inside mobile sheet that already has a header) */}
       {!hideHeader ? (
         <div className="shrink-0 border-b border-[var(--hairline)] bg-[var(--surface-card)]">
@@ -528,8 +528,8 @@ export default function StylePanel({ collapsed, onCollapsedChange, className, hi
         </div>
       )}
 
-      {/* Scrollable sections */}
-      <div className="flex-1 overflow-y-auto overflow-x-hidden">
+      {/* Scrollable sections — min-h-0 + overscroll-contain prevents leak to html; parent is overflow-hidden h-full */}
+      <div className="flex-1 min-h-0 max-h-full overflow-y-auto overflow-x-hidden overscroll-contain">
         {/* FONT */}
         <Accordion title="FONT" icon="A" defaultOpen={true}>
           <div className="space-y-4">

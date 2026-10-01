@@ -157,7 +157,7 @@ export default function EditorShell({ captionListSlot, stylePanelSlot, waveformS
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-64px)] flex-col bg-[var(--canvas)] lg:h-[calc(100vh-64px)] lg:min-h-[calc(100vh-64px)] lg:overflow-hidden">
+    <div className="flex min-h-[calc(100vh-64px)] flex-col bg-[var(--canvas)] lg:h-[calc(100vh-64px)] lg:max-h-[calc(100vh-64px)] lg:min-h-0 lg:overflow-hidden lg:max-w-full">
       {/* Secondary toolbar — 48px, in-flow shrink-0 (not sticky) so it naturally sits below SiteHeader (64px) inside flex column; video starts at 112px below viewport top with no overlap. Solid bg-[var(--canvas)] prevents bleed. */}
       <header className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-[var(--hairline)] bg-[var(--canvas)] px-3 sm:px-4 lg:px-6">
         {/* Left: back + filename */}
@@ -289,8 +289,8 @@ export default function EditorShell({ captionListSlot, stylePanelSlot, waveformS
         </div>
       </header>
 
-      {/* Main content — primary landmark — scroll fix: main/row/wrapper are flex-1 min-h-0 with overflow-hidden ONLY at lg (desktop fixed viewport). Mobile/tablet remain natural scroll (no overflow-hidden). Video is shrink-0 flex-none (h-auto) so it never stretches and leaves white; Caption is flex-1 min-h-0 overflow-hidden at lg with internal overflow-y-auto. */}
-      <main id="main-content" className="flex flex-1 min-h-0 min-w-0 flex-col bg-[var(--canvas)] p-3 sm:p-4 lg:p-4 gap-3 lg:gap-3 lg:overflow-hidden">
+      {/* Main content — fixed at lg: h fills remaining outer height minus 48px toolbar, no min-h calc. Mobile natural scroll (no overflow-hidden). Row flex-1 min-h-0 items-stretch fills height; waveform shrink-0 sits flush with no gap. */}
+      <main id="main-content" className="flex flex-1 min-h-0 min-w-0 flex-col bg-[var(--canvas)] p-3 sm:p-4 lg:p-4 gap-3 lg:gap-3 lg:min-h-0 lg:overflow-hidden lg:max-h-full">
         {/* Mobile mode toggle row (visible only <sm) — fixed widths prevent shift */}
         <div className="flex items-center justify-center gap-2 border border-[var(--hairline)] bg-[var(--surface-card)] rounded-[var(--radius-xl)] px-3 py-2 sm:hidden shadow-[var(--shadow-soft)]">
           <div className="flex w-[160px] shrink-0 items-center justify-between rounded-full border border-[var(--hairline)] bg-[var(--surface-strong)] p-0.5">
@@ -339,10 +339,10 @@ export default function EditorShell({ captionListSlot, stylePanelSlot, waveformS
           </div>
         </div>
 
-        {/* Main 3-col area — lg:overflow-hidden only at lg; mobile natural scroll */}
-        <div className="flex flex-1 min-h-0 min-w-0 flex-col gap-3 lg:flex-row lg:gap-3 lg:overflow-hidden">
-          {/* Left+Center wrapper — lg:overflow-hidden + lg:items-start prevents Video stretch; mobile is natural column then sm row */}
-          <div className="flex flex-1 min-h-0 min-w-0 flex-col gap-3 sm:flex-row lg:flex-row lg:gap-3 lg:overflow-hidden lg:items-start">
+        {/* Main 3-col area — flex-1 min-h-0 lg:items-stretch so Video shrink-0 + Caption flex-1 fill row height; waveform shrink-0 flush below */}
+        <div className="flex flex-1 min-h-0 min-w-0 flex-col gap-3 lg:flex-row lg:items-stretch lg:gap-3 lg:min-h-0 lg:overflow-hidden lg:max-h-full">
+          {/* Left+Center wrapper — flex-1 min-h-0 items-stretch: Video self-start natural h-auto, Caption flex-1 self-stretch fills height */}
+          <div className="flex flex-1 min-h-0 min-w-0 flex-col gap-3 sm:flex-row lg:flex-row lg:items-stretch lg:gap-3 lg:min-h-0 lg:overflow-hidden lg:max-h-full">
             {/* Video Player — scroll fix: shrink-0 flex-none h-auto (not flex-1) so card sizes to video content and never leaves white gap. At lg, self-start prevents stretch; inner stage handles portrait via aspectRatio without flex-1 height-0 trick. */}
             <section
               className={`flex shrink-0 flex-none flex-col items-stretch overflow-hidden bg-[var(--surface-card)] border border-[var(--hairline)] rounded-[var(--radius-xl)] shadow-[var(--shadow-card)] w-full sm:w-[60%] p-3 lg:p-3 lg:shrink-0 lg:flex-none lg:self-start ${isStyleCollapsed ? "lg:w-[58%] xl:w-[56%]" : "lg:w-[52%] xl:w-[52%]"}`}
@@ -360,7 +360,7 @@ export default function EditorShell({ captionListSlot, stylePanelSlot, waveformS
             {/* Caption List — scroll fix: flex-1 min-h-0 with overflow-hidden at lg and internal overflow-y-auto (CaptionList's listRef). Mobile keeps min-h-[320px] for usability but allows page scroll; at lg, flex-1 + min-h-0 + lg:overflow-hidden lets 73 segments scroll internally without page white. */}
             <section
               id="caption-list-slot"
-              className="flex flex-1 min-h-[320px] flex-col bg-[var(--surface-card)] border border-[var(--hairline)] rounded-[var(--radius-xl)] shadow-[var(--shadow-card)] overflow-hidden sm:min-h-0 sm:w-[40%] lg:w-auto lg:flex-1 lg:min-h-0 lg:self-stretch lg:overflow-hidden"
+              className="flex flex-1 min-h-[320px] flex-col bg-[var(--surface-card)] border border-[var(--hairline)] rounded-[var(--radius-xl)] shadow-[var(--shadow-card)] overflow-hidden sm:min-h-0 sm:w-[40%] lg:w-auto lg:flex-1 lg:min-h-0 lg:max-h-full lg:self-stretch lg:overflow-hidden"
               aria-label="Caption list"
             >
               {captionListSlot ?? <CaptionList />}
@@ -372,14 +372,14 @@ export default function EditorShell({ captionListSlot, stylePanelSlot, waveformS
             id="style-panel-slot"
             className={
               isStyleCollapsed
-                ? "hidden lg:flex lg:flex-col shrink-0 w-[56px] self-start sticky top-[88px] h-[calc(100vh-88px-24px)] bg-[var(--surface-card)] border border-[var(--hairline)] rounded-[var(--radius-xl)] shadow-[var(--shadow-elevated)] overflow-hidden"
-                : "hidden lg:flex lg:flex-col shrink-0 lg:w-[20%] lg:min-w-[320px] lg:max-w-[380px] bg-[var(--surface-card)] border border-[var(--hairline)] rounded-[var(--radius-xl)] shadow-[var(--shadow-card)] overflow-hidden"
+                ? "hidden lg:flex lg:flex-col shrink-0 w-[56px] self-start sticky top-[88px] h-[calc(100vh-88px-24px)] min-h-0 overflow-hidden bg-[var(--surface-card)] border border-[var(--hairline)] rounded-[var(--radius-xl)] shadow-[var(--shadow-elevated)]"
+                : "hidden lg:flex lg:flex-col shrink-0 lg:w-[20%] lg:min-w-[320px] lg:max-w-[380px] bg-[var(--surface-card)] border border-[var(--hairline)] rounded-[var(--radius-xl)] shadow-[var(--shadow-card)] min-h-0 overflow-hidden lg:min-h-0 lg:h-[calc(100vh-88px-24px)] lg:max-h-[calc(100vh-88px-24px)] lg:overflow-hidden self-start lg:sticky lg:top-[88px]"
             }
             aria-label="Style panel"
           >
             {stylePanelSlot ? (
-              <div className="flex flex-1 flex-col overflow-hidden">
-                <div className="flex-1 overflow-y-auto">{stylePanelSlot}</div>
+              <div className="flex max-h-full flex-1 min-h-0 flex-col overflow-hidden">
+                <div className="flex-1 min-h-0 max-h-full overflow-y-auto overflow-x-hidden overscroll-contain">{stylePanelSlot}</div>
               </div>
             ) : (
               <StylePanel collapsed={isStyleCollapsed} onCollapsedChange={setIsStyleCollapsed} />
@@ -388,8 +388,8 @@ export default function EditorShell({ captionListSlot, stylePanelSlot, waveformS
           {/* FAB removed — collapsed rail already contains its own expand button (mt-3 ›) at top of rail; duplicate FAB at right-6 bottom-6 overlapped rail bottom edge when collapsed. Hidden to prevent incursion while preserving expand affordance via rail. */}
         </div>
 
-        {/* Waveform strip collapsible — hidden on mobile per PRD §9.1 — feature-card with subtle gradient orbs */}
-        <div className="hidden shrink-0 bg-[var(--surface-card)] border border-[var(--hairline)] rounded-[var(--radius-xl)] shadow-[var(--shadow-card)] overflow-hidden relative sm:block">
+        {/* Waveform strip collapsible — shrink-0 mt-0 sits directly below row via main gap-3; hidden on mobile per PRD §9.1 — no extra margin */}
+        <div className="hidden shrink-0 mt-0 bg-[var(--surface-card)] border border-[var(--hairline)] rounded-[var(--radius-xl)] shadow-[var(--shadow-card)] overflow-hidden relative sm:block">
           {/* subtle atmospheric orbs behind waveform */}
           <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-[radial-gradient(circle_at_center,rgba(167,229,211,0.22)_0%,transparent_70%)] blur-[1px]" aria-hidden />
           <div className="pointer-events-none absolute -left-10 -bottom-10 h-32 w-32 rounded-full bg-[radial-gradient(circle_at_center,rgba(244,197,168,0.18)_0%,transparent_70%)] blur-[1px]" aria-hidden />
