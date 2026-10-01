@@ -157,8 +157,8 @@ export default function EditorShell({ captionListSlot, stylePanelSlot, waveformS
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-64px)] flex-col bg-[var(--canvas)] lg:h-[calc(100vh-64px)] lg:overflow-hidden">
-      {/* Secondary toolbar — 48px, not sticky, no duplicate wordmark (global header owns CapAI) */}
+    <div className="flex min-h-[calc(100vh-64px)] flex-col bg-[var(--canvas)] lg:h-[calc(100vh-64px)] lg:min-h-[calc(100vh-64px)] lg:overflow-hidden">
+      {/* Secondary toolbar — 48px, shrink-0 not sticky (avoids double-sticky overlap with SiteHeader top-0). z-30 < SiteHeader z-50, solid canvas so no bleed. */}
       <header className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-[var(--hairline)] bg-[var(--canvas)] px-3 sm:px-4 lg:px-6">
         {/* Left: back + filename */}
         <div className="flex min-w-0 items-center gap-3">
@@ -289,8 +289,8 @@ export default function EditorShell({ captionListSlot, stylePanelSlot, waveformS
         </div>
       </header>
 
-      {/* Main content — primary landmark — light editorial canvas with feature-card panels — in-flow 56px rail guarantees no overlay incursion at any zoom/subpixel */}
-      <main id="main-content" className="flex flex-1 min-h-0 min-w-0 flex-col bg-[var(--canvas)] p-3 sm:p-4 lg:p-6 gap-4 lg:overflow-hidden">
+      {/* Main content — primary landmark — light editorial canvas with feature-card panels — in-flow 56px rail guarantees no overlay incursion at any zoom/subpixel. pt-0 (no negative margin) so video top never slides under sticky SiteHeader. p reduced to lg:p-4 + gap-3 to give video more vertical room vs previous lg:p-6/gap-4 waste. */}
+      <main id="main-content" className="flex flex-1 min-h-0 min-w-0 flex-col bg-[var(--canvas)] p-3 sm:p-4 lg:p-4 gap-3 lg:gap-3 lg:overflow-hidden">
         {/* Mobile mode toggle row (visible only <sm) — fixed widths prevent shift */}
         <div className="flex items-center justify-center gap-2 border border-[var(--hairline)] bg-[var(--surface-card)] rounded-[var(--radius-xl)] px-3 py-2 sm:hidden shadow-[var(--shadow-soft)]">
           <div className="flex w-[160px] shrink-0 items-center justify-between rounded-full border border-[var(--hairline)] bg-[var(--surface-strong)] p-0.5">
@@ -340,15 +340,15 @@ export default function EditorShell({ captionListSlot, stylePanelSlot, waveformS
         </div>
 
         {/* Main 3-col area — flex-1 min-h-0 overflow-hidden (lg) so video card never pushes controls out / no desktop scroll */}
-        <div className="flex flex-1 min-h-0 min-w-0 flex-col gap-4 lg:flex-row lg:overflow-hidden">
+        <div className="flex flex-1 min-h-0 min-w-0 flex-col gap-3 lg:flex-row lg:gap-3 lg:overflow-hidden">
           {/* Left+Center wrapper — in-flow rail occupies flex space, so Video 58%+ Caption flex-1 fill remaining width minus 56px+GAP, never under rail */}
-          <div className="flex flex-1 min-h-0 min-w-0 flex-col gap-4 sm:flex-row lg:flex-row lg:overflow-hidden">
-            {/* Video Player — flex-1 min-h-0 overflow-hidden so card stays inside viewport; stage flex-1 handles portrait sizing without vh calc */}
+          <div className="flex flex-1 min-h-0 min-w-0 flex-col gap-3 sm:flex-row lg:flex-row lg:gap-3 lg:overflow-hidden">
+            {/* Video Player — flex-1 min-h-0 overflow-hidden so card stays inside viewport; stage flex-1 handles portrait sizing without vh calc. lg:flex-1 stretch fills row height; p reduced to lg:p-3 to maximize stage (prev p-5 wasted 16px). */}
             <section
-              className={`flex flex-1 min-h-0 flex-col items-center overflow-hidden bg-[var(--surface-card)] border border-[var(--hairline)] rounded-[var(--radius-xl)] shadow-[var(--shadow-card)] sm:w-[60%] p-4 lg:p-5 ${isStyleCollapsed ? "lg:w-[58%] xl:w-[56%]" : "lg:w-[52%] xl:w-[52%]"}`}
+              className={`flex flex-1 min-h-0 flex-col items-stretch overflow-hidden bg-[var(--surface-card)] border border-[var(--hairline)] rounded-[var(--radius-xl)] shadow-[var(--shadow-card)] sm:w-[60%] p-3 lg:p-3 ${isStyleCollapsed ? "lg:w-[58%] xl:w-[56%]" : "lg:w-[52%] xl:w-[52%]"}`}
               aria-label="Video player"
             >
-              <div className="flex w-full justify-center overflow-hidden lg:flex-1 lg:min-h-0">
+              <div className="flex w-full flex-1 min-h-0 justify-center overflow-hidden lg:flex-1 lg:min-h-0">
                 <VideoPlayer videoDims={videoDims} />
               </div>
               <p className="mt-3 hidden text-center text-[11px] text-[var(--muted)] sm:block">

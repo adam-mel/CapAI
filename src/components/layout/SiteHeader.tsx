@@ -89,7 +89,7 @@ export default function SiteHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-[var(--hairline)] bg-[var(--canvas)] px-4 sm:px-6">
+      <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center justify-between border-b border-[var(--hairline)] bg-[var(--canvas)] px-4 sm:px-6">
         {/* Left: wordmark */}
         <div className="flex items-center gap-3">
           <Link href="/" className="inline-flex items-center gap-2" aria-label="CapAI home">

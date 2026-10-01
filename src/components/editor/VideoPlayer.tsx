@@ -51,20 +51,22 @@ export default function VideoPlayer({ videoDims: externalDims }: VideoPlayerProp
   const hasExternal = !!(externalDims && externalDims.w && externalDims.h && externalDims.w >= 64 && externalDims.h >= 64);
   const dims = hasExternal ? (externalDims as { w: number; h: number }) : measuredDims;
   const isPortrait = !!(dims && dims.h > dims.w);
-  // Flex-constrained stage — fills available flex height, no vh calc. Parent row is
-  // h-[calc(100vh-64px)] + overflow-hidden, outer card is flex-1 min-h-0 (column),
-  // stage is flex-1 min-h-0 (flex:1 1 0 / height:0 trick) capped at 100% so object-contain
-  // scales portrait/landscape to fill without pushing controls out. No calc(100vh) — flex owns height.
+  // Flex-constrained stage — fills available flex height, no vh calc (prev calc(100vh-360px)=540px@900px wasted 120px).
+  // Parent row is h-[calc(100vh-64px)] + overflow-hidden, outer card flex-1 min-h-0 (column), stage flex-1 min-h-0
+  // (flex:1 1 0) with aspectRatio and no maxHeight cap — flexbox distributes remaining viewport after
+  // headers/padding, so portrait 9:16 expands to use full available (~640px vs 540px before) without
+  // pushing controls out. maxWidth 100% + object-contain handles landscape/vertical without letterbox clip.
   const stageStyle: React.CSSProperties | undefined =
     dims && !isFullscreen
       ? {
           aspectRatio: `${dims.w} / ${dims.h}`,
           flex: "1 1 0",
           minHeight: 0,
-          maxHeight: "100%",
+          maxHeight: "none",
           maxWidth: "100%",
           width: "auto",
-          height: "auto",
+          height: "0",
+          alignSelf: "center",
         }
       : undefined;
 

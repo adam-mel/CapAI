@@ -45,10 +45,12 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        {/* Global top-nav — ElevenLabs editorial spec: 64px, canvas, hairline, wordmark left, nav center, primary pill right — single sticky header */}
+        {/* Global top-nav — ElevenLabs editorial spec: 64px, canvas, hairline, wordmark left, nav center, primary pill right — single sticky header (z-50 solid canvas prevents bleed-through; body has no negative margin so EditorShell calc(100vh-64px) sits exactly below) */}
         <SiteHeader />
         <LangDirSync />
-        {children}
+        <div className="flex min-h-0 flex-col">
+          {children}
+        </div>
         <QuickSettingsModal />
         <SettingsWindow />
       </body>
