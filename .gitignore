@@ -36,4 +36,27 @@ coverage/
 playwright-report/
 test-results/
 
+# Lean repo — dev artifacts (untracked but kept locally)
+BUG_SEARCH_FINDINGS/
+tests/
+temp-e2e/
+migrations/
+AGENTS.md
+CLAUDE.md
+CapAI_PRD_v1.md
+DESIGN-elevenlabs.md
+GITHUB_PROTECTION_GUIDE.md
+VERCEL_DEPLOY_GUIDE.md
+PROTECTION_SUMMARY.md
+canvas-burn-verify.mjs
+check_fallback.mjs
+final-local-verify.mjs
+measure-diff.mjs
+measure-pure-export.mjs
+verify-tester.js
+verify.js
+verify1.js
+wysiwyg-verify.mjs
+sdtni.config.mjs
+.vercel/
 .vercel
